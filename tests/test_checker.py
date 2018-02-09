@@ -53,3 +53,15 @@ foo.spam
         ''')
         checker = FancyHeaderChecker(tree=module, filename='foo/spam.py')
         self.assertEqual(len(list(checker.run())), 0)
+
+    def test_module_with_valid_header_and_leading_comment(self):
+        module = ast.parse('''\
+# coding: utf8
+"""
+====
+spam
+====
+"""\
+        ''')
+        checker = FancyHeaderChecker(tree=module, filename='spam.py')
+        self.assertEqual(len(list(checker.run())), 0)
