@@ -18,6 +18,8 @@ class FancyHeaderChecker(object):
 
     def get_header_value(self):
         import_path = os.path.splitext(self.filename)[0].replace('/', '.')
+        if import_path.endswith('__init__'):
+            import_path = import_path.rsplit('.', 1)[0]
         border = '=' * len(import_path)
         return '\n'.join(('', border, import_path, border, ''))
 
