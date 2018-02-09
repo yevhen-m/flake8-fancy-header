@@ -3,6 +3,7 @@ __version__ = '0.1.0'
 
 import ast
 import os.path
+import sys
 
 
 class FancyHeaderChecker(object):
@@ -48,3 +49,21 @@ class FancyHeaderChecker(object):
             yield (
                 1, 1, self.message_invalid, type(self),
             )
+
+
+major, minor = sys.version_info[0], sys.version_info[1]
+if (major, minor) >= (3, 7):
+    def run(self):
+        docstring = self.tree.docstring
+        if not docstring:
+            yield (
+                1, 1, self.message_missing, type(self),
+            )
+            return
+
+        if not docstring.startswith(self.get_header_value()):
+            yield (
+                1, 1, self.message_invalid, type(self),
+            )
+
+    FancyHeaderChecker.run = run
