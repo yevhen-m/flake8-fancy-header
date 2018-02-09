@@ -42,7 +42,7 @@ class FancyHeaderChecker(object):
             )
             return
 
-        if not body[0].value.s == self.get_header_value():
+        if not body[0].value.s.startswith(self.get_header_value()):
             yield (
                 1, 1, self.message_invalid, type(self),
             )
