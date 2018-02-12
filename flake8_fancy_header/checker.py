@@ -6,7 +6,7 @@ import os.path
 import sys
 
 
-class FancyHeaderChecker(object):
+class BaseChecker(object):
     name = 'flake8-fancy-header'
     version = __version__
 
@@ -25,6 +25,7 @@ class FancyHeaderChecker(object):
         return '\n'.join(('', border, import_path, border, ''))
 
 
+class FancyHeaderCheckerBefore37(BaseChecker):
     def run(self):
         body = self.tree.body
         if not body:
@@ -51,8 +52,7 @@ class FancyHeaderChecker(object):
             )
 
 
-major, minor = sys.version_info[0], sys.version_info[1]
-if (major, minor) >= (3, 7):
+class FancyHeaderChecker(BaseChecker):
     def run(self):
         docstring = self.tree.docstring
         if not docstring:
@@ -65,5 +65,3 @@ if (major, minor) >= (3, 7):
             yield (
                 1, 1, self.message_invalid, type(self),
             )
-
-    FancyHeaderChecker.run = run
