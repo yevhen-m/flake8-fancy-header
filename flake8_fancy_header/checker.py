@@ -2,7 +2,9 @@ __version__ = '0.1.0'
 
 
 import ast
-import os.path
+
+from os import getcwd
+from os.path import join, normpath, splitext
 
 
 class BaseChecker(object):
@@ -17,7 +19,12 @@ class BaseChecker(object):
         self.filename = filename
 
     def get_header_value(self):
-        import_path = os.path.splitext(self.filename)[0].replace('/', '.')
+        # Assume that python runs from project's root, so we can get its
+        # working directory and resolve from it.
+        cwd = getcwd() + '/'
+        filename = normpath(join(cwd, self.filename)).split(cwd, 1)[1]
+
+        import_path = splitext(filename)[0].replace('/', '.')
         if import_path.endswith('__init__'):
             import_path = import_path.rsplit('.', 1)[0]
         border = '=' * len(import_path)
