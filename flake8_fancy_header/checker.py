@@ -3,7 +3,6 @@ __version__ = '0.1.0'
 
 import ast
 import os.path
-import sys
 
 
 class BaseChecker(object):
