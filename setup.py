@@ -1,3 +1,9 @@
+"""
+=====
+setup
+=====
+"""
+
 import setuptools
 
 install_requires = [

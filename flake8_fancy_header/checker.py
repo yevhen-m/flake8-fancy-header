@@ -1,10 +1,22 @@
+"""
+===========================
+flake8_fancy_header.checker
+===========================
+"""
+
 __version__ = '0.1.0'
 
 
 import ast
 
 from os import getcwd
-from os.path import join, normpath, splitext
+from os.path import exists, dirname, join, normpath, splitext
+
+PROJECT_ROOT_MARKERS = [
+    '.git',
+    'setup.cfg',
+    'setup.py',
+]
 
 
 class BaseChecker(object):
@@ -18,12 +30,25 @@ class BaseChecker(object):
         self.tree = tree
         self.filename = filename
 
-    def get_header_value(self):
-        # Assume that python runs from project's root, so we can get its
-        # working directory and resolve from it.
-        cwd = getcwd() + '/'
-        filename = normpath(join(cwd, self.filename)).split(cwd, 1)[1]
+    def get_project_root_dir(self, current_dir=None):
+        if current_dir == '/':
+            # Reached fs root, fallback to cwd
+            return getcwd()
 
+        if current_dir is None:
+            current_dir = getcwd()
+
+        for marker in PROJECT_ROOT_MARKERS:
+            if exists(join(current_dir, marker)):
+                return current_dir
+
+        return self.get_project_root_dir(current_dir=dirname(current_dir))
+
+    def get_header_value(self):
+        filename = (
+            normpath(join(getcwd(), self.filename))
+            .split(self.get_project_root_dir() + '/', 1)[1]
+        )
         import_path = splitext(filename)[0].replace('/', '.')
         if import_path.endswith('__init__'):
             import_path = import_path.rsplit('.', 1)[0]
