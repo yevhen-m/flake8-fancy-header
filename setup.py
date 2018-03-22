@@ -4,11 +4,45 @@ setup
 =====
 """
 
+import os
+import os.path
 import setuptools
+import sys
+
+from setuptools import Command
+from shutil import rmtree
 
 install_requires = [
     "flake8 > 3.0.0",
 ]
+
+
+here = os.path.abspath(os.path.dirname(__file__))
+
+
+class UploadCommand(Command):
+    """Support setup.py upload."""
+
+    description = 'Build and publish the package.'
+    user_options = []
+
+    initialize_options = finalize_options = lambda self: None
+
+    def run(self):
+        try:
+            print('Removing previous builds…')
+            rmtree(os.path.join(here, 'dist'))
+        except OSError:
+            pass
+
+        print('Building Source and Wheel (universal) distribution…')
+        os.system(f'{sys.executable} setup.py sdist bdist_wheel --universal')
+
+        print('Uploading the package to PyPi via Twine…')
+        os.system('twine upload dist/*')
+
+        sys.exit()
+
 
 setuptools.setup(
     name="flake8_fancy_header",
@@ -38,4 +72,7 @@ setuptools.setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Topic :: Software Development :: Quality Assurance",
     ],
+    cmdclass={
+        'upload': UploadCommand,
+    },
 )
