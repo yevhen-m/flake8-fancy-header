@@ -36,7 +36,9 @@ class UploadCommand(Command):
             pass
 
         print('Building Source and Wheel (universal) distribution…')
-        os.system(f'{sys.executable} setup.py sdist bdist_wheel --universal')
+        os.system(
+            '{} setup.py sdist bdist_wheel --universal'.format(sys.executable),
+        )
 
         print('Uploading the package to PyPi via Twine…')
         os.system('twine upload dist/*')
