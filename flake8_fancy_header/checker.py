@@ -82,7 +82,7 @@ class FancyHeaderCheckerBefore37(BaseChecker):
 
 class FancyHeaderChecker(BaseChecker):
     def run(self):
-        docstring = self.tree.docstring
+        docstring = ast.get_docstring(self.tree, clean=False)
         if not docstring:
             if not self.tree.body:
                 return
