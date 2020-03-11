@@ -13,7 +13,7 @@ install_requires = [
 setuptools.setup(
     name="flake8_fancy_header",
     license="MIT",
-    version="0.2.0",
+    version="0.3.0",
     description="check file has a fancy header at the top",
     author="yevhen-m",
     url="https://github.com/yevhen-m/flake8-fancy-header",

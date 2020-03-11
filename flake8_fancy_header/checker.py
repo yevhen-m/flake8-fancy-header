@@ -4,7 +4,7 @@ flake8_fancy_header.checker
 ===========================
 """
 
-__version__ = '0.1.0'
+__version__ = '0.3.0'
 
 
 import ast
