@@ -23,7 +23,11 @@ class CheckerTestCase(unittest.TestCase):
     def test_empty_module(self):
         module = ast.parse('')
         checker = FancyHeaderChecker(tree=module, filename='spam.py')
-        self.assertEqual(len(list(checker.run())), 1)
+        self.assertEqual(len(list(checker.run())), 0)
+
+        module = ast.parse('\n\n\n')
+        checker = FancyHeaderChecker(tree=module, filename='spam.py')
+        self.assertEqual(len(list(checker.run())), 0)
 
     def test_module_with_docstring(self):
         module = ast.parse('"Spam module."')

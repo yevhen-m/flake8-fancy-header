@@ -60,9 +60,6 @@ class FancyHeaderCheckerBefore37(BaseChecker):
     def run(self):
         body = self.tree.body
         if not body:
-            yield (
-                1, 1, self.message_missing, type(self),
-            )
             return
 
         if not isinstance(body[0], ast.Expr):
@@ -87,6 +84,9 @@ class FancyHeaderChecker(BaseChecker):
     def run(self):
         docstring = self.tree.docstring
         if not docstring:
+            if not self.tree.body:
+                return
+
             yield (
                 1, 1, self.message_missing, type(self),
             )
